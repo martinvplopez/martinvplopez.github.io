@@ -3,8 +3,4 @@
 ## Testing out shields
 ![TestName](https://img.shields.io/badge/Name-Mart%C3%ADn-purple)
 
-<p align=”center”>
-<a href=”https://es.linkedin.com/in/martinvplopez”>
-<img src=”https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin&labelColor=blue">
-</a>
-</p>
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Mart%C3%ADn%20van%20Puffelen%20L%C3%B3pez-0077B5?style=for-the-badge&logo=linkedin&logoColor=white&labelColor=101010)](https://es.linkedin.com/in/martinvplopez)
