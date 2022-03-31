@@ -1,0 +1,2 @@
+banners-> shields.io
+mouredev es un buen repo para inspirar el readme
