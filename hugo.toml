@@ -3,7 +3,7 @@ languageCode = 'en-us'
 title = 'Martín vPL'
 
 [params]
-  description = "Personal blog about entrepreneurship, education, and innovation"
+  description = "A space to slow down, gather scattered thoughts, and trace how my truth, interests, and vision change over time."
   author = "Martín van Puffelen López"
   authorDescription = "martinvplopez@gmail.com"
   twitter = "martinvplopez"
