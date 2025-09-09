@@ -430,6 +430,17 @@
             }
         }
 
+        /* Extra-small phones: lift footer slightly and tighten vertical rhythm */
+        @media (max-width: 360px) {
+            body {
+                padding: 1.25rem 0.75rem;
+            }
+            footer {
+                margin-top: 2rem;
+                padding-top: 1rem;
+            }
+        }
+
         /* Prefer larger hover on devices that actually support hover */
         @media (hover: hover) {
             .social-links a:hover {
