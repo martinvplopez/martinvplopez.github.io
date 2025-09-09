@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/m.png">
+    <link rel="shortcut icon" type="image/png" href="/images/m.png">
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+    <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+    <meta property="og:url" content="{{ .Permalink }}">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+    <meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.7;
+            color: #1a1a1a;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            background-color: #fafafa;
+            font-size: 16px;
+        }
+        
+        header {
+            margin-bottom: 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 2.5rem;
+            border-bottom: 2px solid #e8e8e8;
+        }
+        
+        .site-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-align: center;
+        }
+        
+        .site-title a {
+            color: #1a1a1a;
+            text-decoration: none;
+            transition: text-decoration 0.2s ease;
+        }
+        
+        .site-title a:hover {
+            color: #1a1a1a;
+            text-decoration: underline;
+        }
+        
+        .site-title .lowercase {
+            text-transform: lowercase;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+        
+        .social-links a:hover {
+            background-color: #a7a6a6;
+        }
+        
+        /* LinkedIn specific hover color */
+        .social-links a[aria-label="LinkedIn"]:hover {
+            background-color: #327bc4;
+        }
+        
+        .social-links img {
+            width: 35px;
+            height: 35px;
+            display: block;
+        }
+        
+        main {
+            min-height: 60vh;
+        }
+        
+        .post-list {
+            list-style: none;
+        }
+        
+        .post-item {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            gap: 3rem;
+            align-items: flex-start;
+        }
+        
+        .post-item:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .post-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 1rem 0;
+            flex: 1;
+            min-width: 0;
+            line-height: 1.3;
+        }
+        
+        .post-title a {
+            color: #1a1a1a;
+            text-decoration: none;
+            line-height: 1.3;
+            transition: text-decoration 0.2s ease;
+        }
+        
+        .post-title a:hover {
+            color: #1a1a1a;
+            text-decoration: underline;
+        }
+        
+        .post-content-right {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .post-excerpt {
+            color: #4a4a4a;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        .post-meta {
+            font-size: 0.9rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .post-date {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .post-tags {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .post-tag {
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+            font-size: 0.9rem;
+            color: #2563eb;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .post-tag:hover {
+            color: #1d4ed8;
+        }
+        
+        .post-content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #2c2c2c;
+        }
+        
+        article {
+            background: #ffffff;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            margin-bottom: 3rem;
+        }
+        
+        article header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #e8e8e8;
+        }
+        
+        article h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin: 0 0 1.5rem 0;
+            color: #1a1a1a;
+            letter-spacing: -0.02em;
+        }
+        
+        .post-content h1,
+        .post-content h2,
+        .post-content h3,
+        .post-content h4 {
+            margin: 2.5rem 0 1.5rem 0;
+            font-weight: 700;
+            color: #1a1a1a;
+            line-height: 1.3;
+        }
+        
+        .post-content h1 { font-size: 2.2rem; }
+        .post-content h2 { font-size: 1.8rem; }
+        .post-content h3 { font-size: 1.5rem; }
+        .post-content h4 { font-size: 1.3rem; }
+        
+        .post-content p {
+            margin-bottom: 1.8rem;
+            font-size: 1.1rem;
+        }
+        
+        .post-content ul,
+        .post-content ol {
+            margin-bottom: 1.8rem;
+            padding-left: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .post-content blockquote {
+            border-left: 4px solid #2563eb;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: #4a4a4a;
+            background: #f8fafc;
+            border-radius: 0 8px 8px 0;
+            font-size: 1.1rem;
+        }
+        
+        .post-content code {
+            background-color: #f1f5f9;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #2563eb;
+            font-weight: 500;
+        }
+        
+        .post-content pre {
+            background-color: #1e293b;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 2rem 0;
+            color: #e2e8f0;
+        }
+        
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: #e2e8f0;
+            font-weight: 400;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .pagination a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .pagination a:hover {
+            color: #000;
+        }
+        
+        .comments-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .comments-section h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .comment-form {
+            margin-top: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background-color: #000;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            background-color: #333;
+        }
+        
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        .author {
+            font-size: 1rem;
+            color: #999;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1.5rem 1rem;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+                margin-bottom: 3rem;
+            }
+            
+            .site-title {
+                font-size: 2rem;
+            }
+            
+            .post-item {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding-bottom: 2rem;
+            }
+            
+            .post-title {
+                font-size: 1.4rem;
+            }
+            
+            .social-links {
+                gap: 1.5rem;
+            }
+            
+            article {
+                padding: 2rem 1.5rem;
+            }
+            
+            article h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="site-title">
+            <a href="{{ .Site.BaseURL }}">MARTÍN <span class="lowercase">v</span>PL</a>
+        </h1>
+        <nav class="social-links">
+            {{ with .Site.Params.twitter }}
+            <a href="https://twitter.com/{{ . }}" target="_blank" rel="noopener" aria-label="X (Twitter)">
+                <img src="/images/x.svg" alt="X (Twitter) logo">
+            </a>
+            {{ end }}
+            {{ with .Site.Params.linkedin }}
+            <a href="https://linkedin.com/in/{{ . }}" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <img src="/images/linkedin.svg" alt="LinkedIn logo">
+            </a>
+            {{ end }}
+        </nav>
+    </header>
+    
+    <main>
+        {{ block "main" . }}{{ end }}
+    </main>
+    
+    <footer>
+        <p class="author">{{ .Site.Params.author }}</p>
+        <p>{{ .Site.Params.authorDescription }}</p>
+    </footer>
+</body>
+</html> 
