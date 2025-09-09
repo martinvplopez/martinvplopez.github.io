@@ -2,6 +2,9 @@ baseURL = 'https://martinvplopez.es/'
 languageCode = 'en-us'
 title = 'Martín vPL'
 
+[pagination]
+  pagerSize = 5
+
 [params]
   description = "A space to slow down, gather scattered thoughts, and trace how my truth, interests, and vision change over time."
   author = "Martín van Puffelen López"

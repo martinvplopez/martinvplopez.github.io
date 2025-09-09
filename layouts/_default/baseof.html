@@ -33,6 +33,10 @@
             box-sizing: border-box;
         }
         
+        html, body {
+            height: 100%;
+        }
+        
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.7;
@@ -42,6 +46,10 @@
             padding: 3rem 2rem;
             background-color: #fafafa;
             font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
         
         header {
@@ -93,16 +101,12 @@
             height: 44px;
             border-radius: 50%;
             text-decoration: none;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, transform 0.15s ease;
         }
         
         .social-links a:hover {
             background-color: #a7a6a6;
-        }
-        
-        /* LinkedIn specific hover color */
-        .social-links a[aria-label="LinkedIn"]:hover {
-            background-color: #327bc4;
+            transform: scale(1.12);
         }
         
         .social-links img {
@@ -112,7 +116,8 @@
         }
         
         main {
-            min-height: 60vh;
+            flex: 1 0 auto;
+            min-height: 0;
         }
         
         .post-list {
@@ -373,6 +378,7 @@
             text-align: center;
             color: #999;
             font-size: 0.9rem;
+            flex-shrink: 0;
         }
         
         .author {
@@ -416,6 +422,11 @@
             
             article h1 {
                 font-size: 2rem;
+            }
+            
+            footer {
+                margin-top: 3rem;
+                padding-top: 1.5rem;
             }
         }
     </style>

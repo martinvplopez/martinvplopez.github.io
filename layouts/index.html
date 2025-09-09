@@ -1,6 +1,7 @@
 {{ define "main" }}
+{{ $paginator := .Paginate (where .Site.RegularPages "Section" "posts") }}
 <ul class="post-list">
-    {{ range where .Site.RegularPages "Section" "posts" }}
+    {{ range $paginator.Pages }}
     <li class="post-item">
         <h2 class="post-title">
             <a href="{{ .RelPermalink }}">{{ .Title }}</a>
@@ -28,18 +29,18 @@
     {{ end }}
 </ul>
 
-{{ if gt .Paginator.TotalPages 1 }}
+{{ if gt $paginator.TotalPages 1 }}
 <div class="pagination">
-    {{ if .Paginator.HasPrev }}
-    <a href="{{ .Paginator.Prev.URL }}">← Previous</a>
+    {{ if $paginator.HasPrev }}
+    <a href="{{ $paginator.Prev.URL }}">← Previous</a>
     {{ else }}
     <span></span>
     {{ end }}
     
-    <span>Page {{ .Paginator.PageNumber }} of {{ .Paginator.TotalPages }}</span>
+    <span>Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}</span>
     
-    {{ if .Paginator.HasNext }}
-    <a href="{{ .Paginator.Next.URL }}">Next →</a>
+    {{ if $paginator.HasNext }}
+    <a href="{{ $paginator.Next.URL }}">Next →</a>
     {{ else }}
     <span></span>
     {{ end }}
