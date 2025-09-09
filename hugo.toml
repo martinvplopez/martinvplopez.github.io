@@ -1,0 +1,27 @@
+baseURL = 'https://martinvplopez.es/'
+languageCode = 'en-us'
+title = 'Martín vPL'
+
+[params]
+  description = "Personal blog about entrepreneurship, education, and innovation"
+  author = "Martín van Puffelen López"
+  authorDescription = "martinvplopez@gmail.com"
+  twitter = "martinvplopez"
+  linkedin = "martinvplopez"
+  
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 2
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
