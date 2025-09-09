@@ -106,7 +106,7 @@
         
         .social-links a:hover {
             background-color: #a7a6a6;
-            transform: scale(1.12);
+            transform: scale(1.18);
         }
         
         .social-links img {
@@ -427,6 +427,21 @@
             footer {
                 margin-top: 3rem;
                 padding-top: 1.5rem;
+            }
+        }
+
+        /* Prefer larger hover on devices that actually support hover */
+        @media (hover: hover) {
+            .social-links a:hover {
+                transform: scale(1.22);
+            }
+        }
+
+        /* Touch devices: provide tap feedback instead of hover */
+        @media (hover: none) {
+            .social-links a:active {
+                background-color: #a7a6a6;
+                transform: scale(1.06);
             }
         }
     </style>
