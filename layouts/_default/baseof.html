@@ -298,6 +298,11 @@
             font-weight: 400;
         }
         
+        /* Make all external links open in new tab */
+        .post-content a[href^="http"]:not([href*="martinvplopez.es"]) {
+            /* This will be handled by JavaScript */
+        }
+        
         .pagination {
             display: flex;
             justify-content: space-between;
@@ -484,5 +489,16 @@
         <p class="author">{{ .Site.Params.author }}</p>
         <p>{{ .Site.Params.authorDescription }}</p>
     </footer>
+    
+    <script>
+        // Make all external links open in new tab
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="http"]:not([href*="martinvplopez.es"])');
+            links.forEach(link => {
+                link.setAttribute('target', '_blank');
+                link.setAttribute('rel', 'noopener noreferrer');
+            });
+        });
+    </script>
 </body>
 </html> 
