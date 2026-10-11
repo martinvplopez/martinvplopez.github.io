@@ -1,0 +1,41 @@
+{{- /*
+  Generates a 1200x630 social preview card for the page: title on the
+  paper-colored base image, site name and domain along the bottom.
+  Text is drawn on a narrower crop first so long titles wrap with a
+  right margin, then the crop is laid back over the base.
+*/ -}}
+{{- $base := resources.Get "og/base.png" -}}
+{{- $bold := resources.Get "fonts/newsreader-600.ttf" -}}
+{{- $italic := resources.Get "fonts/newsreader-400-italic.ttf" -}}
+{{- $ink := "#1f1c18" -}}
+{{- $muted := "#6b655c" -}}
+
+{{- $canvas := $base.Crop "1080x630 TopLeft" -}}
+{{- if .IsHome -}}
+  {{- $canvas = $canvas | images.Filter
+    (images.Text site.Title (dict "font" $bold "size" 104 "color" $ink "x" 100 "y" 150))
+    (images.Text site.Params.description (dict "font" $italic "size" 40 "color" $muted "linespacing" 12 "x" 100 "y" 310))
+  -}}
+{{- else -}}
+  {{- /* Estimate title lines (conservatively) to place the description below it */ -}}
+  {{- $long := gt (len .Title) 50 -}}
+  {{- $size := cond $long 60 76 -}}
+  {{- $perLine := cond $long 28 22 -}}
+  {{- $lines := math.Ceil (div (float (len .Title)) $perLine) -}}
+  {{- $descY := add 140 (mul $lines (add (mul $size 0.8) 14)) 40 | int -}}
+  {{- $canvas = $canvas | images.Filter
+    (images.Text .Title (dict "font" $bold "size" $size "color" $ink "linespacing" 14 "x" 100 "y" 140))
+  -}}
+  {{- with .Description -}}
+    {{- $canvas = $canvas | images.Filter
+      (images.Text (. | truncate 140 | string) (dict "font" $italic "size" 36 "color" $muted "linespacing" 10 "x" 100 "y" $descY))
+    -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $footer := printf "%s   ·   %s" site.Title (urls.Parse site.BaseURL).Host -}}
+{{- $img := $base | images.Filter
+  (images.Overlay $canvas 0 0)
+  (images.Text $footer (dict "font" $italic "size" 32 "color" $muted "x" 100 "y" 515))
+-}}
+{{- return $img -}}

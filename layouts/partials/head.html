@@ -1,0 +1,60 @@
+{{- $title := cond .IsHome site.Title (printf "%s · %s" .Title site.Title) -}}
+{{- $ogTitle := cond .IsHome site.Title .Title -}}
+{{- $desc := .Description | default site.Params.description -}}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $desc }}">
+<meta name="author" content="{{ site.Params.author }}">
+<link rel="canonical" href="{{ .Permalink }}">
+
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161514" media="(prefers-color-scheme: dark)">
+<script>
+    // Apply a saved light/dark choice before first paint to avoid a flash.
+    window.setTheme = function (theme) {
+        document.documentElement.dataset.theme = theme;
+        var bg = theme === "dark" ? "#161514" : "#fbfaf7";
+        document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.content = bg; });
+    };
+    (function () {
+        try {
+            var saved = localStorage.getItem("theme");
+            if (saved === "light" || saved === "dark") window.setTheme(saved);
+        } catch (e) {}
+    })();
+</script>
+
+<link rel="icon" type="image/png" href="/images/m.png">
+{{ with site.Home.OutputFormats.Get "rss" -}}
+<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">
+{{ end -}}
+
+<link rel="preload" href="/fonts/newsreader-latin-normal.woff2" as="font" type="font/woff2" crossorigin>
+{{ $css := resources.Get "css/main.css" | minify | fingerprint -}}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:title" content="{{ $ogTitle }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+{{ if and .IsPage (not .Date.IsZero) -}}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+{{ end -}}
+{{ with partial "og-image.html" . -}}
+<meta property="og:image" content="{{ .Permalink }}">
+<meta property="og:image:width" content="{{ .Width }}">
+<meta property="og:image:height" content="{{ .Height }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ .Permalink }}">
+{{ end -}}
+
+<!-- Twitter Card -->
+<meta name="twitter:title" content="{{ $ogTitle }}">
+<meta name="twitter:description" content="{{ $desc }}">
+{{ with site.Params.twitter -}}
+<meta name="twitter:site" content="@{{ . }}">
+{{ end -}}

@@ -1,4 +1,4 @@
-baseURL = 'https://martinvplopez.es/'
+baseURL = 'https://martinvplopez.com/'
 languageCode = 'en-us'
 title = 'Martín vPL'
 
@@ -12,19 +12,19 @@ title = 'Martín vPL'
   twitter = "martinvplopez"
   linkedin = "martinvplopez"
   
-[menu]
-  [[menu.main]]
-    identifier = "home"
-    name = "Home"
-    url = "/"
-    weight = 1
-  [[menu.main]]
-    identifier = "about"
-    name = "About"
-    url = "/about/"
-    weight = 2
+# Header links come from this menu. To add an About page, create
+# content/about.md and uncomment:
+# [[menu.main]]
+#   name = "About"
+#   pageRef = "/about"
+#   weight = 1
 
 [markup]
   [markup.goldmark]
+    [markup.goldmark.parser]
+      # Lets the image render hook turn standalone images into <figure>s
+      wrapStandAloneImageWithinParagraph = false
     [markup.goldmark.renderer]
       unsafe = true
+  [markup.highlight]
+    style = 'github-dark'
