@@ -1,0 +1,27 @@
+{{- /*
+  Standalone images become <figure>s. A Markdown title becomes the caption:
+  ![Alt text](/images/photo.webp "Caption shown under the image")
+  Width/height are read from files in static/ to avoid layout shift.
+*/ -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $w := 0 -}}
+{{- $h := 0 -}}
+{{- if not $u.IsAbs -}}
+  {{- $file := path.Join "static" $u.Path -}}
+  {{- if and (fileExists $file) (in (slice ".png" ".jpg" ".jpeg" ".gif" ".webp") (path.Ext $file | lower)) -}}
+    {{- with images.Config $file -}}
+      {{- $w = .Width -}}
+      {{- $h = .Height -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if .IsBlock -}}
+<figure>
+  <img src="{{ .Destination | safeURL }}" alt="{{ .PlainText }}"{{ with $w }} width="{{ . }}" height="{{ $h }}"{{ end }} loading="lazy" decoding="async">
+  {{- with .Title }}
+  <figcaption>{{ . | markdownify }}</figcaption>
+  {{- end }}
+</figure>
+{{- else -}}
+<img src="{{ .Destination | safeURL }}" alt="{{ .PlainText }}"{{ with $w }} width="{{ . }}" height="{{ $h }}"{{ end }} loading="lazy" decoding="async">
+{{- end -}}

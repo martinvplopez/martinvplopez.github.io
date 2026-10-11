@@ -1,0 +1,6 @@
+{{- $sep := `<span class="sep" aria-hidden="true">·</span>` | safeHTML -}}
+{{- if not .Date.IsZero -}}
+  <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>{{ $sep }}
+{{- end -}}
+{{- .ReadingTime }} min read
+{{- if .Draft }}{{ $sep }}Draft{{ end -}}

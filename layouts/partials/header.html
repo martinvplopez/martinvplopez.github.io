@@ -1,0 +1,23 @@
+<header class="site-header">
+    <div class="wrap">
+        <a class="site-title" href="{{ "/" | relURL }}">{{ site.Title }}</a>
+        <nav class="site-nav" aria-label="Site">
+            {{ range site.Menus.main }}
+            <a href="{{ .URL }}"{{ if $.IsMenuCurrent "main" . }} aria-current="page"{{ end }}>{{ .Name }}</a>
+            {{ end }}
+            <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode" hidden>
+                {{- partial "icon.html" "moon" -}}
+                {{- partial "icon.html" "sun" -}}
+            </button>
+            {{ with site.Home.OutputFormats.Get "rss" }}
+            <a href="{{ .RelPermalink }}" aria-label="RSS feed" title="RSS feed">{{ partial "icon.html" "rss" }}</a>
+            {{ end }}
+            {{ with site.Params.twitter }}
+            <a href="https://x.com/{{ . }}" target="_blank" rel="noopener" aria-label="X (Twitter)" title="X">{{ partial "icon.html" "x" }}</a>
+            {{ end }}
+            {{ with site.Params.linkedin }}
+            <a href="https://www.linkedin.com/in/{{ . }}" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">{{ partial "icon.html" "linkedin" }}</a>
+            {{ end }}
+        </nav>
+    </div>
+</header>
